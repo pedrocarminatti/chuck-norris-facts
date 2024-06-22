@@ -1,31 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSync } from '@fortawesome/free-solid-svg-icons';
 
 const Fact: React.FC = () => {
-  const [fact, setFact] = useState<string>('');
+  const [factData, setFactData] = useState<{ fact: string; icon_url: string }>({
+    fact: '',
+    icon_url: ''
+  });
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchFact = async () => {
-      try {
-        const response = await axios.post('http://localhost:4000/graphql', {
-          query: `
-            {
+  const fetchFact = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post('http://localhost:4000/graphql', {
+        query: `
+          {
+            chuckNorrisFact {
               fact
+              icon_url
             }
-          `
-        });
-        setFact(response.data.data.fact);
-      } catch (err) {
-        setError('Failed to fetch fact');
-      } finally {
-        setLoading(false);
-      }
-    };
+          }
+        `
+      });
+      setFactData(response.data.data.chuckNorrisFact);
+    } catch (err) {
+      setError('Failed to fetch fact');
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchFact();
-  }, []);
+  }, []); // Executa apenas na montagem inicial
+
+  const handleRefresh = () => {
+    fetchFact();
+  };
 
   if (loading) return <div className="text-center mt-8">Loading...</div>;
   if (error) return <div className="text-center mt-8 text-red-600">{error}</div>;
@@ -33,7 +46,16 @@ const Fact: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="p-6 max-w-md mx-auto bg-white rounded-xl shadow-md text-center">
-        <p className="text-3xl font-bold text-gray-900 mb-8">{fact}</p>
+        {factData.icon_url && (
+          <img src={factData.icon_url} alt="Chuck Norris Icon" className="mx-auto mb-4 rounded-full h-20 w-20" />
+        )}
+        <p className="text-3xl font-bold text-gray-900 mb-4">{factData.fact}</p>
+        <button
+          onClick={handleRefresh}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex items-center justify-center mx-auto"
+        >
+          <FontAwesomeIcon icon={faSync} className="mr-2" />
+        </button>
       </div>
     </div>
   );
