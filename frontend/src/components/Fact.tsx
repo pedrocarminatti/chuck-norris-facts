@@ -27,14 +27,13 @@ const Fact: React.FC = () => {
     fetchFact();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) return <div className="text-center mt-8">Loading...</div>;
+  if (error) return <div className="text-center mt-8 text-red-600">{error}</div>;
 
   return (
-    <div className="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4">
-      <div>
-        <div className="text-xl font-medium text-black">Chuck Norris Fact</div>
-        <p className="text-gray-500">{fact}</p>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="p-6 max-w-md mx-auto bg-white rounded-xl shadow-md text-center">
+        <p className="text-3xl font-bold text-gray-900 mb-8">{fact}</p>
       </div>
     </div>
   );
