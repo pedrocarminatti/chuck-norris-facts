@@ -26,7 +26,7 @@ const Fact: React.FC = () => {
       });
       setFactData(response.data.data.chuckNorrisFact);
     } catch (err) {
-      setError('Failed to fetch fact');
+      setError('Failed to fetch fact: ' + err );
     } finally {
       setLoading(false);
     }
@@ -34,7 +34,7 @@ const Fact: React.FC = () => {
 
   useEffect(() => {
     fetchFact();
-  }, []); // Executa apenas na montagem inicial
+  }, []);
 
   const handleRefresh = () => {
     fetchFact();
