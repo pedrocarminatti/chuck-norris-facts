@@ -13,8 +13,9 @@ const Fact: React.FC = () => {
 
   const fetchFact = async () => {
     setLoading(true);
+    setError(null);
     try {
-      const response = await axios.post('https://chuck-norris-facts-backend-jmd4zz05i-pedro-carminattis-projects.vercel.app/graphql', {
+      const response = await axios.post('https://chuck-norris-facts-backend.vercel.app/graphql', {
         query: `
           {
             chuckNorrisFact {
@@ -25,12 +26,12 @@ const Fact: React.FC = () => {
         `
       });
       setFactData(response.data.data.chuckNorrisFact);
-    } catch (err) {
-      setError('Failed to fetch fact: ' + err );
+    } catch (err: any) {
+      setError('Failed to fetch fact: ' + (err.message || err));
     } finally {
       setLoading(false);
     }
-  };
+  };  
 
   useEffect(() => {
     fetchFact();
