@@ -14,7 +14,7 @@ const Fact: React.FC = () => {
   const fetchFact = async () => {
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:4000/graphql', {
+      const response = await axios.post('https://chuck-norris-facts-backend-jmd4zz05i-pedro-carminattis-projects.vercel.app/graphql', {
         query: `
           {
             chuckNorrisFact {
